@@ -40,10 +40,38 @@ function App() {
     });
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowModal(true);
+    
+    try {
+      const response = await fetch('https://backendoe.onrender.com/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        alert('Booking confirmed! You will receive a confirmation email shortly.');
+        setFormData({
+          service: '',
+          date: '',
+          time: '',
+          name: '',
+          email: '',
+          phone: '',
+          petDetails: ''
+        });
+      } else {
+        alert('Failed to submit booking. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      alert('An error occurred. Please try again later.');
+    }
   };
+  
   
   const formatDate = (dateString) => {
     if (!dateString) return '';
